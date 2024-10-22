@@ -39,4 +39,23 @@ public class ProductDto {
     this(product);
     categories.forEach(category -> this.categories.add(new CategoryDto(category)));
   }
+
+  public static Product toEntity(ProductDto dto) {
+    Product entity = new Product();
+    entity.setId(dto.getId());
+    entity.setName(dto.getName());
+    entity.setDescription(dto.getDescription());
+    entity.setDate(dto.getDate());
+    entity.setImgUrl(dto.getImgUrl());
+    entity.setPrice(dto.getPrice());
+    return entity;
+  }
+
+  public static void toEntity(ProductDto dto, Product entity) {
+    entity.setName(dto.getName());
+    entity.setDescription(dto.getDescription());
+    entity.setDate(dto.getDate());
+    entity.setImgUrl(dto.getImgUrl());
+    entity.setPrice(dto.getPrice());
+  }
 }

@@ -1,5 +1,6 @@
 package com.gusta.dscatalog.services;
 
+import com.gusta.dscatalog.dtos.CategoryDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,8 @@ import com.gusta.dscatalog.services.exceptions.EntityNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.HashSet;
+
 @Service
 @RequiredArgsConstructor
 public class ProductService {
@@ -22,7 +25,8 @@ public class ProductService {
 
   @Transactional(readOnly = true)
   public Page<ProductDto> list(Pageable pageable) {
-    return productRepository.findAll(pageable).map(ProductDto::new);
+    var productList = productRepository.findAll(pageable);
+    return productList.map(ProductDto::new);
   }
 
   @Transactional(readOnly = true)
@@ -34,38 +38,39 @@ public class ProductService {
 
   @Transactional
   public ProductDto create(ProductDto dto) {
-    Product product = new Product();
-    copyDtoToEntity(dto, product);
+    var product = ProductDto.toEntity(dto);
+    validateDependencies(dto, product);
+
     product = productRepository.save(product);
     return new ProductDto(product);
   }
 
+  @Transactional
   public ProductDto update(Long id, ProductDto dto) {
-    var product = productRepository.findById(id).orElseThrow(() -> {
-      throw new EntityNotFoundException("Product not found");
-    });
+    var product = productRepository.findById(id)
+      .orElseThrow(() -> new EntityNotFoundException("Product not found"));
 
-    copyDtoToEntity(dto, product);
+    ProductDto.toEntity(dto, product);
+    validateDependencies(dto, product);
+
     product = productRepository.save(product);
     return new ProductDto(product);
   }
 
+  @Transactional
   public void delete(Long id) {
-    var Product = getById(id);
-    productRepository.deleteById(Product.getId());
+    if (!productRepository.existsById(id))
+      throw new EntityNotFoundException("Product not found");
+
+    productRepository.deleteById(id);
   }
 
-  private void copyDtoToEntity(ProductDto dto, Product entity) {
-    entity.setName(dto.getName());
-    entity.setDescription(dto.getDescription());
-    entity.setDate(dto.getDate());
-    entity.setImgUrl(dto.getImgUrl());
-    entity.setPrice(dto.getPrice());
+  private void validateDependencies(ProductDto dto, Product entity) {
+    var categoryIds = dto.getCategories().stream()
+        .map(CategoryDto::getId)
+        .toList();
 
-    entity.getCategories().clear();
-    dto.getCategories().forEach(item -> {
-      Category category = categoryRepository.getReferenceById(item.getId());
-      entity.getCategories().add(category);
-    });
+    var categories = categoryRepository.findAllById(categoryIds);
+    entity.setCategories(new HashSet<>(categories));
   }
 }
