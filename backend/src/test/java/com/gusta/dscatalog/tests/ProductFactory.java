@@ -22,6 +22,7 @@ public class ProductFactory {
   public static ProductDto createProductDto () {
     ProductDto productDto = new ProductDto();
 
+    productDto.setId(1L);
     productDto.setName("Test Product");
     productDto.setDescription("Test Description");
     productDto.setPrice(10.0);

@@ -45,7 +45,7 @@ public class ProductController {
   }
 
   @PutMapping("{id}")
-  @ResponseStatus(HttpStatus.OK)
+  @ResponseStatus(HttpStatus.ACCEPTED)
   public ProductDto update(
       @PathVariable Long id,
       @RequestBody ProductDto dto) {
