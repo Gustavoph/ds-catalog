@@ -2,7 +2,6 @@ package com.gusta.dscatalog.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gusta.dscatalog.dtos.ProductDto;
-import com.gusta.dscatalog.entities.Product;
 import com.gusta.dscatalog.services.ProductService;
 
 import com.gusta.dscatalog.services.exceptions.EntityNotFoundException;
