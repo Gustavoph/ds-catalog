@@ -1,6 +1,7 @@
 package com.gusta.dscatalog.tests;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 
 import com.gusta.dscatalog.dtos.ProductDto;
@@ -9,14 +10,17 @@ import com.gusta.dscatalog.entities.Product;
 public class ProductFactory {
 
   public static Product create() {
-    return new Product(
-        1L,
-        "Name Test",
-        "Description Test",
-        10.0,
-        "test.png",
-        Instant.now(),
-        new HashSet<>());
+    var product =  new Product();
+
+    product.setId(1L);
+    product.setName("Name Test");
+    product.setDescription("Description Test");
+    product.setPrice(10.0);
+    product.setDate(Instant.now());
+    product.setCreatedAt(LocalDateTime.now());
+    product.setUpdatedAt(LocalDateTime.now());
+
+    return product;
   }
 
   public static ProductDto createProductDto () {

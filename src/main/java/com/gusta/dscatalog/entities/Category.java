@@ -1,39 +1,23 @@
 package com.gusta.dscatalog.entities;
 
-import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import jakarta.persistence.*;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table
 @Getter
 @Setter
-@EqualsAndHashCode(of = "id")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Category {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+public class Category extends BaseEntity {
 
   private String name;
 
-  @CreationTimestamp
-  private LocalDateTime createdAt;
+  @ManyToMany(mappedBy = "categories")
+  private Set<Product> products = new HashSet<>();
 
-  @UpdateTimestamp
-  private LocalDateTime updatedAt;
 }

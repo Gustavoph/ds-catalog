@@ -1,3 +1,13 @@
+INSERT INTO USERS (first_name, last_name, email, password) VALUES ('Gustavo', 'Oliveira', 'gusta@gmail.com', '$2a$10$eACCYoNOHEqXve8aIWT8Nu3PkMXWBaOxJ9aORUYzfMQCbVBIhZ8tG');
+INSERT INTO USERS (first_name, last_name, email, password) VALUES ('Charles', 'Silva', 'charles@gmail.com', '$2a$10$eACCYoNOHEqXve8aIWT8Nu3PkMXWBaOxJ9aORUYzfMQCbVBIhZ8tG');
+
+INSERT INTO ROLE (authority) VALUES ('ROLE_OPERATOR');
+INSERT INTO ROLE (authority) VALUES ('ROLE_ADMIN');
+
+INSERT INTO USER_ROLE (user_id, role_id) VALUES (1, 1);
+INSERT INTO USER_ROLE (user_id, role_id) VALUES (2, 1);
+INSERT INTO USER_ROLE (user_id, role_id) VALUES (2, 2);
+
 INSERT INTO CATEGORY (name, created_At) VALUES ('Livros', NOW());
 INSERT INTO CATEGORY (name, created_At) VALUES ('Eletrônicos', NOW());
 INSERT INTO CATEGORY (name, created_At) VALUES ('Computadores', NOW());
