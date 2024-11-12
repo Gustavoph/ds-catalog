@@ -36,27 +36,30 @@ public class UserService {
   @Transactional(readOnly = true)
   public UserDTO getById(Long id) {
     return userRepository.findById(id)
-        .map(user -> new UserDTO(user))
-        .orElseThrow(() -> new EntityNotFoundException("User not found"));
+      .map(UserDTO::new)
+      .orElseThrow(() -> new EntityNotFoundException("User not found"));
   }
 
   @Transactional
-  public UserDTO create(UserDTO dto) {
-    var user = UserDTO.toEntity(dto);
+  public UserDTO create(UserDTO.Create dto) {
+    var user = UserDTO.createToEntity(dto);
     validateDependencies(dto, user);
 
-    user.setPassword(passwordEncoder.encode(dto.getPassword()));
+    var hashedPassword = passwordEncoder.encode(user.getPassword());
+    user.setPassword(hashedPassword);
+
     user = userRepository.save(user);
     return new UserDTO(user);
   }
 
   @Transactional
-  public UserDTO update(Long id, UserDTO dto) {
-    var user = userRepository.findById(id)
-      .orElseThrow(() -> new EntityNotFoundException("User not found"));
+  public UserDTO update(Long id, UserDTO.Update dto) {
+    var user = userRepository.findById(id).orElseThrow(() -> {
+      throw new EntityNotFoundException("User not found");
+    });
 
-    UserDTO.toEntity(dto, user);
-    validateDependencies(dto, user);
+    UserDTO.updateToEntity(dto, user);
+//    validateDependencies(dto, user);
 
     user = userRepository.save(user);
     return new UserDTO(user);
@@ -70,10 +73,10 @@ public class UserService {
     userRepository.deleteById(id);
   }
 
-  private void validateDependencies(UserDTO dto, User entity) {
-    var categoryIds = dto.getRoles().stream()
-        .map(RoleDTO::getId)
-        .toList();
+  private void validateDependencies(UserDTO.Create dto, User entity) {
+    var categoryIds = dto.roles().stream()
+      .map(RoleDTO::getId)
+      .toList();
 
     var categories = roleRepository.findAllById(categoryIds);
     entity.setRoles(new HashSet<>(categories));

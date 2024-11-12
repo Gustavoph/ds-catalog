@@ -2,6 +2,7 @@ package com.gusta.dscatalog.controllers;
 
 import com.gusta.dscatalog.dtos.UserDTO;
 import com.gusta.dscatalog.services.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +29,7 @@ public class UserController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public UserDTO create(@RequestBody UserDTO dto) {
+  public UserDTO create(@Valid @RequestBody UserDTO.Create dto) {
     return userService.create(dto);
   }
 
@@ -36,7 +37,7 @@ public class UserController {
   @ResponseStatus(HttpStatus.ACCEPTED)
   public UserDTO update(
       @PathVariable Long id,
-      @RequestBody UserDTO dto) {
+      @Valid @RequestBody UserDTO.Update dto) {
     return userService.update(id, dto);
   }
 

@@ -42,7 +42,6 @@ public class ProductDto {
 
   public static Product toEntity(ProductDto dto) {
     Product entity = new Product();
-    entity.setId(dto.getId());
     entity.setName(dto.getName());
     entity.setDescription(dto.getDescription());
     entity.setDate(dto.getDate());

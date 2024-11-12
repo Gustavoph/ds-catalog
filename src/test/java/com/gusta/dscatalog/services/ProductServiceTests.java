@@ -86,8 +86,8 @@ public class ProductServiceTests {
     var category = CategoryFactory.create();
 
     Mockito
-        .when(categoryRepository.findAllById(ArgumentMatchers.any(List.class)))
-        .thenReturn(List.of(category));
+      .when(categoryRepository.findAllById(ArgumentMatchers.any(List.class)))
+      .thenReturn(List.of(category));
 
     Mockito
       .when(productRepository.save(Mockito.any(Product.class)))
