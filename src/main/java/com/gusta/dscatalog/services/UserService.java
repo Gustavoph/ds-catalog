@@ -14,6 +14,9 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +25,7 @@ import java.util.HashSet;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService implements UserDetailsService {
   private final UserRepository userRepository;
   private final RoleRepository roleRepository;
   private final PasswordEncoder passwordEncoder;
@@ -59,8 +62,6 @@ public class UserService {
     });
 
     UserDTO.updateToEntity(dto, user);
-//    validateDependencies(dto, user);
-
     user = userRepository.save(user);
     return new UserDTO(user);
   }
@@ -80,5 +81,11 @@ public class UserService {
 
     var categories = roleRepository.findAllById(categoryIds);
     entity.setRoles(new HashSet<>(categories));
+  }
+
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    return userRepository.findByEmail(username)
+      .orElseThrow(() -> new UsernameNotFoundException("User not found"));
   }
 }

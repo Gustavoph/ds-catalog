@@ -1,0 +1,4 @@
+- Implementar UserDetails
+- Implementar UserDetailsService
+- Implementar UserNotFoundException
+- GrantedAuthority

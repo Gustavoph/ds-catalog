@@ -3,13 +3,20 @@ package com.gusta.dscatalog.entities;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
 
 @Entity
-@Table
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Role extends BaseEntity {
+@Table(name = "ROLES")
+public class Role extends BaseEntity implements GrantedAuthority {
+
   private String authority;
+
+  @Override
+  public String getAuthority() {
+    return authority;
+  }
 }
